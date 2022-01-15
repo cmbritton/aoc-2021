@@ -107,7 +107,7 @@ class BingoGame(object):
 
 
 def main():
-    with open('bingo.data', 'r') as data_file:
+    with open('../../data/day04.data', 'r') as data_file:
         line = data_file.readline()
         bingo_game = BingoGame(line)
         line = data_file.readline()

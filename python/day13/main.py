@@ -48,7 +48,7 @@ def read_input() -> (list, list, int, int):
     folds = []
     max_x = 0
     max_y = 0
-    with open('data.txt', 'r') as data_file:
+    with open('../../data/day13.data', 'r') as data_file:
         lines = data_file.read().splitlines()
         for line in lines:
             if ',' in line:

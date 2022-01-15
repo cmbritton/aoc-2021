@@ -354,7 +354,7 @@ def elapsed_time(start_time: int, end_time: int) -> str:
 
 
 def init_data() -> bitarray:
-    with open('data.txt', 'r') as data_file:
+    with open('../../data/day16.data', 'r') as data_file:
         line = data_file.readline()
     packet_bits = bitarray()
     for i in range(0, len(line), 2):

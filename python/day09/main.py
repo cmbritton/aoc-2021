@@ -43,7 +43,7 @@ def get_adjacent_points(point):
     return adjacent_points
 
 
-with open('data.txt', 'r') as data_file:
+with open('../../data/day09.data', 'r') as data_file:
     lines = data_file.read().splitlines()
 
 height_map = np.zeros((len(lines), len(lines[0])), dtype=np.ubyte)

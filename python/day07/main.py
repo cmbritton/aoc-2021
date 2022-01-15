@@ -2,7 +2,7 @@ import numpy as np
 import timeit
 
 
-with open('data.txt', 'r') as data_file:
+with open('../../data/day07.data', 'r') as data_file:
     input_line = data_file.readline()
     orig_positions = np.array(input_line.strip().split(',')).astype(int)
     min_position = np.amin(orig_positions)

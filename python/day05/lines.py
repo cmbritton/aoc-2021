@@ -161,7 +161,7 @@ def _create_line(input_line):
 
 def main():
     lines_map = LinesMap()
-    with open('lines.data', 'r') as data_file:
+    with open('../../data/day05.data', 'r') as data_file:
         input_line = data_file.readline()
         while input_line:
             lines_map.add_line(_create_line(input_line))

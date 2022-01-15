@@ -304,7 +304,7 @@ class Simulator(object):
 
 def main():
     simulator = Simulator()
-    with open('data.txt', 'r') as data_file:
+    with open('../../data/day08.data', 'r') as data_file:
         input_line = data_file.readline().strip()
         while input_line:
             simulator.add_entry(input_line)

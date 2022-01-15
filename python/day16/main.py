@@ -52,7 +52,7 @@ def print_results(part, version_sum):
 
 
 def init_data():
-    with open('data.txt', 'r') as data_file:
+    with open('../../data/day16.data', 'r') as data_file:
         line = data_file.readline()
     return ''.join(f'{int(b, 16):04b}' for b in line)
 

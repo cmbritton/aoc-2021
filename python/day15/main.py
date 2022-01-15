@@ -140,7 +140,7 @@ def print_results(part, elapsed_time_seconds):
 
 
 def init_data():
-    with open('data.txt', 'r') as data_file:
+    with open('../../data/day15.data', 'r') as data_file:
         lines = data_file.read().splitlines()
 
     matrix = np.zeros((len(lines[0]), len(lines)), np.ubyte)

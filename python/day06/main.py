@@ -43,7 +43,7 @@ class Simulator(object):
 
 
 def main():
-    with open('data.txt', 'r') as data_file:
+    with open('../../data/day06.data', 'r') as data_file:
         input_line = data_file.readline()
         simulator = Simulator(input_line)
         simulator.run()

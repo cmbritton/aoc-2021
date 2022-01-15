@@ -251,7 +251,7 @@ def elapsed_time(start_time: int, end_time: int) -> str:
 
 def init_data():
     data = []
-    with open('data.txt', 'r') as data_file:
+    with open('../../data/day18.data', 'r') as data_file:
         lines = data_file.read().splitlines()
     for line in lines:
         data.append(ast.literal_eval(line))

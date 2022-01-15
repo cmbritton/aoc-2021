@@ -50,7 +50,7 @@ class LifeSupportDiagnostics(object):
 
 def main():
     life_support_diagnostics = LifeSupportDiagnostics()
-    with open('diagnostics.data', 'r') as data_file:
+    with open('../../data/day03.data', 'r') as data_file:
         line = data_file.readline()
         while line:
             life_support_diagnostics.values.append(int(line.strip(), 2))

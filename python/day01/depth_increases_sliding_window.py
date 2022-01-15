@@ -1,4 +1,5 @@
-from _collections import deque
+# from _collections import deque
+from collections import deque
 
 
 class SlidingWindow(object):
@@ -6,7 +7,7 @@ class SlidingWindow(object):
 
     def __init__(self):
         self.window = deque()
-        self.input_values = open('depth_values.data', 'r')
+        self.input_values = open('../../data/day01.data', 'r')
         self.input_value = None
 
     def advance(self):

@@ -11,7 +11,7 @@
 TOKEN_MATCH = {')': '(', '}': '{', ']': '[', '>': '<', '(': ')', '{': '}', '[': ']', '<': '>'}
 
 
-with open('data.txt', 'r') as data_file:
+with open('../../data/day10.data', 'r') as data_file:
     lines = data_file.read().splitlines()
 
 tokens_by_line = []

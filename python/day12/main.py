@@ -51,7 +51,7 @@ class Graph(object):
 
 def build_graph() -> Graph:
     g = Graph()
-    with open('data.txt', 'r') as data_file:
+    with open('../../data/day12.data', 'r') as data_file:
         lines = data_file.read().splitlines()
         for line in lines:
             from_node, to_node = line.split('-')

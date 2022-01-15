@@ -90,7 +90,7 @@ def elapsed_time(start_time: int, end_time: int) -> str:
 
 
 def init_data():
-    with open('data.txt', 'r') as data_file:
+    with open('../../data/day17.data', 'r') as data_file:
         line = data_file.readline()
     m = re.search(r'target area: x=([-0-9]*)\.\.([-0-9]*), y=([-0-9]*)\.\.([-0-9]*)', line)
     return int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4))

@@ -107,7 +107,7 @@ def print_results(part, elapsed_time_seconds):
 
 
 def init_data():
-    with open('data.txt', 'r') as data_file:
+    with open('../../data/day16.data', 'r') as data_file:
         line = data_file.readline()
 
     global packet_data

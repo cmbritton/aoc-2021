@@ -1,7 +1,7 @@
 increase_count = 0
 prev_value = None
 
-with open('depth_values.data', 'r') as data_file:
+with open('../../data/day01.data', 'r') as data_file:
     while True:
         line = data_file.readline()
         if not line:

@@ -63,7 +63,7 @@ def add_energy():
             energy_levels[row][col] += 1
 
 
-with open('data.txt', 'r') as data_file:
+with open('../../data/day11.data', 'r') as data_file:
     lines = data_file.read().splitlines()
 rows = len(lines)
 cols = len(lines[0])

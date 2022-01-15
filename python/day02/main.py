@@ -1,5 +1,5 @@
 def main(submarine):
-    with open('sub_position.data', 'r') as data_file:
+    with open('../../data/day02.data', 'r') as data_file:
         line = data_file.readline()
         while line:
             [direction, units] = line.strip().split()

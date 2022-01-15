@@ -48,7 +48,7 @@ class PowerDiagnostics(object):
 
 def main():
     power_diagnostics = PowerDiagnostics()
-    with open('diagnostics.data', 'r') as data_file:
+    with open('../../data/day03.data', 'r') as data_file:
         line = data_file.readline()
         while line:
             value = line.strip()

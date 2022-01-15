@@ -16,7 +16,7 @@ def get_solution() -> int:
 
 template = None
 rules = []
-with open('data.txt', 'r') as data_file:
+with open('../../data/day14.data', 'r') as data_file:
     lines = data_file.read().splitlines()
 for line in lines:
     if ' -> ' in line:
