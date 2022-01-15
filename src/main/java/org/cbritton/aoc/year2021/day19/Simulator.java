@@ -12,7 +12,7 @@ class Simulator {
 
     private void initData() {
 
-        try (BufferedReader file = new BufferedReader(new FileReader("build/resources/main/day19.data"))) {
+        try (BufferedReader file = new BufferedReader(new FileReader("data/day19.data"))) {
             List<int[]> beacons = null;
             String scannerName = null;
             String line;

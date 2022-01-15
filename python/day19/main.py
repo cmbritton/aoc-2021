@@ -234,7 +234,7 @@ class Simulator(object):
 
     def init_data(self) -> None:
         self.scanners = {}
-        with open('../../resources/day19.data', 'r') as data_file:
+        with open('../../data/day19.data', 'r') as data_file:
             data_lines = data_file.readlines()
         scanner_name = None
         beacons = None
