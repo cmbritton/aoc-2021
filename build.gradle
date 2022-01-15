@@ -18,17 +18,18 @@ test {
     useJUnitPlatform()
 }
 
+def venvPath = "python/venv"
+
 task createVenv(type: Exec) {
-    outputs.dir("venv")
+    outputs.dir("${venvPath}")
     clean.dependsOn(cleanCreateVenv)
-    String venvPath = "venv"
     commandLine "python3", "-m", "venv", "${venvPath}"
 }
 
 task installPythonDependencies(type: Exec) {
     dependsOn createVenv
-    String reqFilePath = "requirements.txt"
-    commandLine "bash", "-c", "--", ". venv/bin/activate; pip install -r ${reqFilePath}; deactivate"
+    String reqFilePath = "python/requirements.txt"
+    commandLine "bash", "-c", "--", ". ${venvPath}/bin/activate; pip install -r ${reqFilePath}; deactivate"
 }
 
 tasks.named("build") {dependsOn(installPythonDependencies) }
