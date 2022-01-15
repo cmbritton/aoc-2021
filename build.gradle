@@ -18,19 +18,17 @@ test {
     useJUnitPlatform()
 }
 
-task createVenv() {
-    def venvPath = "build/venv"
-    doLast {
-        StringBuilder sout = new StringBuilder()
-        StringBuilder serr = new StringBuilder()
-        def process = "python3 -m venv ${venvPath}".execute()
-        process.consumeProcessOutput(sout, serr)
-        process.waitForOrKill(10000)
-        println "$serr"
-        println "$sout"
-    }
+task createVenv(type: Exec) {
+    String venvPath = "${buildDir}/venv"
+    commandLine "python3", "-m", "venv", "${venvPath}"
 }
 
-tasks.named("build") {dependsOn("createVenv") }
+task installPythonDependencies(type: Exec) {
+    dependsOn createVenv
+    String reqFilePath = "src/main/python/requirements.txt"
+    commandLine "bash", "-c", "--", ". ${buildDir}/venv/bin/activate; pip install -r ${reqFilePath}; deactivate"
+}
+
+tasks.named("build") {dependsOn(installPythonDependencies) }
 
 
