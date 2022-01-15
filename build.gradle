@@ -19,14 +19,16 @@ test {
 }
 
 task createVenv(type: Exec) {
-    String venvPath = "${buildDir}/venv"
+    outputs.dir("venv")
+    clean.dependsOn(cleanCreateVenv)
+    String venvPath = "venv"
     commandLine "python3", "-m", "venv", "${venvPath}"
 }
 
 task installPythonDependencies(type: Exec) {
     dependsOn createVenv
-    String reqFilePath = "src/main/python/requirements.txt"
-    commandLine "bash", "-c", "--", ". ${buildDir}/venv/bin/activate; pip install -r ${reqFilePath}; deactivate"
+    String reqFilePath = "requirements.txt"
+    commandLine "bash", "-c", "--", ". venv/bin/activate; pip install -r ${reqFilePath}; deactivate"
 }
 
 tasks.named("build") {dependsOn(installPythonDependencies) }
