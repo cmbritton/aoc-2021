@@ -1,9 +1,6 @@
 package org.cbritton.aoc.year2021.day19;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class Scanner {
 
@@ -136,7 +133,6 @@ class Scanner {
     int[][] beacons = null;
     int[] originPosition = null;
     int[][] rotationMatrix = null;
-    Map<String, int[]> commonIndexes = new HashMap<>();
 
     Scanner(String name, int[][] beacons) {
         this.name = name;
@@ -191,8 +187,7 @@ class Scanner {
 
     int computeCommonBeacons(Scanner other) {
 
-        List<Integer> commonIndexesSelf = new ArrayList<>();
-        List<Integer> commonIndexesOther = new ArrayList<>();
+        int match_count = 0;
         for (int[] b1Self : this.beacons) {
             for (int[] b2Self : this.beacons) {
                 if (b1Self == b2Self) {
@@ -206,55 +201,48 @@ class Scanner {
                         if (((b1Self[0] - b2Self[0]) - (b1Other[0] - b2Other[0])) == 0 &&
                                 ((b1Self[1] - b2Self[1]) - (b1Other[1] - b2Other[1])) == 0 &&
                                 ((b1Self[2] - b2Self[2]) - (b1Other[2] - b2Other[2])) == 0) {
-                            int idx = find(b1Self, this.beacons);
-                            if (!commonIndexesSelf.contains(idx)) {
-                                commonIndexesSelf.add(idx);
-                            }
-                            idx = find(b2Self, this.beacons);
-                            if (!commonIndexesSelf.contains(idx)) {
-                                commonIndexesSelf.add(idx);
-                            }
-                            idx = find(b1Other, other.beacons);
-                            if (!commonIndexesOther.contains(idx)) {
-                                commonIndexesOther.add(idx);
-                            }
-                            idx = find(b2Other, other.beacons);
-                            if (!commonIndexesOther.contains(idx)) {
-                                commonIndexesOther.add(idx);
-                            }
-                            if (commonIndexesSelf.size() >= Scanner.MINIMUM_COMMON_BEACONS) {
-                                if (commonIndexesOther.size() >= Scanner.MINIMUM_COMMON_BEACONS) {
-                                    break;
-                                }
-                            }
-                        }
-                        if (commonIndexesSelf.size() >= Scanner.MINIMUM_COMMON_BEACONS) {
-                            if (commonIndexesOther.size() >= Scanner.MINIMUM_COMMON_BEACONS) {
+                            if (++match_count >= Scanner.MINIMUM_COMMON_BEACONS) {
+                                assert this.originPosition != null;
+                                other.originPosition = new int[]{
+                                        this.originPosition[0] - (b1Other[0] - b1Self[0]),
+                                        this.originPosition[1] - (b1Other[1] - b1Self[1]),
+                                        this.originPosition[2] - (b1Other[2] - b1Self[2])
+                                };
                                 break;
                             }
                         }
                     }
-                    if (commonIndexesSelf.size() >= Scanner.MINIMUM_COMMON_BEACONS) {
-                        if (commonIndexesOther.size() >= Scanner.MINIMUM_COMMON_BEACONS) {
-                            break;
-                        }
-                    }
-                }
-                if (commonIndexesSelf.size() >= Scanner.MINIMUM_COMMON_BEACONS) {
-                    if (commonIndexesOther.size() >= Scanner.MINIMUM_COMMON_BEACONS) {
+                    if (match_count >= Scanner.MINIMUM_COMMON_BEACONS) {
                         break;
                     }
                 }
+                if (match_count >= Scanner.MINIMUM_COMMON_BEACONS) {
+                    break;
+                }
             }
         }
-        if (commonIndexesSelf.size() >= Scanner.MINIMUM_COMMON_BEACONS) {
-            this.commonIndexes.put(other.name, commonIndexesSelf.stream().mapToInt(i -> i).toArray());
-        }
+        return match_count;
+    }
 
-        if (commonIndexesOther.size() >= Scanner.MINIMUM_COMMON_BEACONS) {
-            other.commonIndexes.put(this.name, commonIndexesOther.stream().mapToInt(i -> i).toArray());
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        return commonIndexesSelf.size();
+        Scanner scanner = (Scanner) o;
+
+        if (!Objects.equals(name, scanner.name)) return false;
+        if (!Arrays.deepEquals(beacons, scanner.beacons)) return false;
+        if (!Arrays.equals(originPosition, scanner.originPosition)) return false;
+        return Arrays.deepEquals(rotationMatrix, scanner.rotationMatrix);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + Arrays.deepHashCode(beacons);
+        result = 31 * result + Arrays.hashCode(originPosition);
+        result = 31 * result + Arrays.deepHashCode(rotationMatrix);
+        return result;
     }
 }

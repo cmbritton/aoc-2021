@@ -55,18 +55,9 @@ class Simulator {
             if (overlaps > overlapCount) {
                 overlapCount = overlaps;
                 if (overlaps >= Scanner.MINIMUM_COMMON_BEACONS) {
+                    s2.originPosition = rs2.originPosition;
                     s2.rotationMatrix = rotationMatrix;
                     s2.beacons = rs2.beacons;
-                    s2.commonIndexes = rs2.commonIndexes;
-                    int s1_common_index = s1.commonIndexes.get(s2.name)[0];
-                    int s2_common_index = s2.commonIndexes.get(s1.name)[0];
-                    if (null == s2.originPosition) {
-                        s2.originPosition = new int[]{ 0, 0, 0 };
-                    }
-                    for (int i = 0; i < 3; ++i) {
-                        s2.originPosition[i] =
-                                s1.originPosition[i] - (rs2.beacons[s2_common_index][i] - s1.beacons[s1_common_index][i]);
-                    }
                     break;
                 }
             }
