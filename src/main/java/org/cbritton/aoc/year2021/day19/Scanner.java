@@ -6,6 +6,9 @@ import java.util.Objects;
 
 import static org.cbritton.aoc.year2021.day19.Rotation.rotateBeacon;
 
+/**
+ * A collection of beacons.
+ */
 class Scanner {
 
     static final int MINIMUM_COMMON_BEACONS = 12;
