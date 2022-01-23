@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+
+import static org.cbritton.TimeUtil.elapsedTime;
+import static org.cbritton.aoc.year2021.day19.Rotation.IDENTITY_MATRIX;
+import static org.cbritton.aoc.year2021.day19.Rotation.ROTATIONS;
 
 class Simulator {
 
@@ -19,7 +22,7 @@ class Simulator {
             while ((line = file.readLine()) != null) {
                 if (line.startsWith("---")) {
                     if (null != beacons) {
-                        scanners.put(scannerName, new Scanner(scannerName, beacons.toArray(new int[][]{ })));
+                        scanners.put(scannerName, new Scanner(scannerName, beacons.toArray(new int[][] { })));
                     }
                     beacons = new ArrayList<>();
                     scannerName = "scanner " + line.split(" ")[2];
@@ -28,19 +31,15 @@ class Simulator {
                 if (!line.isBlank()) {
                     String[] values = line.split(",");
                     assert beacons != null;
-                    beacons.add(new int[]{ Integer.parseInt(values[0]), Integer.parseInt(values[1]),
+                    beacons.add(new int[] { Integer.parseInt(values[0]), Integer.parseInt(values[1]),
                             Integer.parseInt(values[2]) });
                 }
             }
             assert beacons != null;
-            scanners.put(scannerName, new Scanner(scannerName, beacons.toArray(new int[][]{ })));
+            scanners.put(scannerName, new Scanner(scannerName, beacons.toArray(new int[][] { })));
             Scanner scanner = scanners.get("scanner 0");
-            scanner.originPosition = new int[]{ 0, 0, 0 };
-            scanner.rotationMatrix = new int[][]{
-                    { 1, 0, 0 },
-                    { 0, 1, 0 },
-                    { 0, 0, 1 }
-            };
+            scanner.originPosition = new int[] { 0, 0, 0 };
+            scanner.rotationMatrix = IDENTITY_MATRIX;
         } catch (IOException e) {
             System.err.println("Error. msg = " + e.getMessage());
         }
@@ -48,23 +47,21 @@ class Simulator {
     }
 
     private void findOverlaps(Scanner s1, Scanner s2) {
-        int overlapCount = 0;
-        for (int[][] rotationMatrix : Scanner.ROTATIONS) {
+
+        for (int[][] rotationMatrix : ROTATIONS) {
             Scanner rs2 = s2.rotate(rotationMatrix);
-            int overlaps = s1.computeCommonBeacons(rs2);
-            if (overlaps > overlapCount) {
-                overlapCount = overlaps;
-                if (overlaps >= Scanner.MINIMUM_COMMON_BEACONS) {
-                    s2.originPosition = rs2.originPosition;
-                    s2.rotationMatrix = rotationMatrix;
-                    s2.beacons = rs2.beacons;
-                    break;
-                }
+            if (s1.overlapsWith(rs2)) {
+                s2.originPosition = rs2.originPosition;
+                s2.rotationMatrix = rotationMatrix;
+                s2.beacons = rs2.beacons;
+                break;
             }
         }
+        return;
     }
 
     private boolean done() {
+
         for (Scanner scanner : this.scanners.values()) {
             if (!scanner.isOriented()) {
                 return false;
@@ -74,6 +71,7 @@ class Simulator {
     }
 
     private void findOverlappingBeacons() {
+
         while (!done()) {
             for (String s1Name : this.scanners.keySet()) {
                 for (String s2Name : this.scanners.keySet()) {
@@ -97,6 +95,7 @@ class Simulator {
     }
 
     void run() {
+
         long startTimeMillis = System.currentTimeMillis();
         initData();
         findOverlappingBeacons();
@@ -107,7 +106,7 @@ class Simulator {
                     if (null != this.scanners.get(scannerName).rotationMatrix) {
                         int[] translatedBeacon = this.scanners.get(scannerName).translate(beacon);
                         if (-1 == this.scanners.get(scannerName).find(translatedBeacon,
-                                beacons.toArray(new int[][]{ }))) {
+                                beacons.toArray(new int[][] { }))) {
                             beacons.add(translatedBeacon);
                         }
                     }
@@ -118,16 +117,5 @@ class Simulator {
         System.err.println("beacon count: " + beacons.size());
         System.err.println("Elapsed time: " + elapsedTime(startTimeMillis, endTimeMillis));
         return;
-    }
-
-    private String elapsedTime(long startTimeMillis, long endTimeMillis) {
-        long elapsedMillis = endTimeMillis - startTimeMillis;
-        final long hr = TimeUnit.MILLISECONDS.toHours(elapsedMillis);
-        final long min = TimeUnit.MILLISECONDS.toMinutes(elapsedMillis - TimeUnit.HOURS.toMillis(hr));
-        final long sec =
-                TimeUnit.MILLISECONDS.toSeconds(elapsedMillis - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
-        final long ms =
-                TimeUnit.MILLISECONDS.toMillis(elapsedMillis - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
-        return String.format("%02dh %02dm %02d.%03ds", hr, min, sec, ms);
     }
 }
