@@ -2,8 +2,17 @@ package org.cbritton;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Utility class to convert elapsed times into hours, minutes, seconds, and milliseconds.
+ */
 public class TimeUtil {
 
+    /**
+     * Formats the elapsed time defined by the specified start time and end time into a friendly format.
+     * @param startTimeMillis the start time in milliseconds
+     * @param endTimeMillis the end time in milliseconds
+     * @return a formatted string of the elapsed time
+     */
     public static String elapsedTime(long startTimeMillis, long endTimeMillis) {
 
         long elapsedMillis = endTimeMillis - startTimeMillis;

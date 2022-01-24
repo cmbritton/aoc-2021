@@ -57,7 +57,7 @@ public class App {
 
         scanners.put(scannerName, new Scanner(scannerName, beacons.toArray(new int[][] { })));
         Scanner scanner = scanners.get("scanner 0");
-        scanner.originPosition = new int[] { 0, 0, 0 };
+        scanner.origin = new int[] { 0, 0, 0 };
         scanner.rotationMatrix = IDENTITY_MATRIX;
 
         long endTimeMillis = System.currentTimeMillis();

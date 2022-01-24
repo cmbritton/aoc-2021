@@ -51,7 +51,8 @@ class Simulator {
     /**
      * Determines if there is a rotation of the unoriented scanner that will result in at least 12 common distance
      * vectors between beacon pairs.
-     * @param orientedScanner the oriented scanner to compare
+     *
+     * @param orientedScanner   the oriented scanner to compare
      * @param unorientedScanner the unoriented scanner to compare
      */
     private void findOverlaps(Scanner orientedScanner, Scanner unorientedScanner) {
@@ -59,7 +60,7 @@ class Simulator {
         for (int[][] rotationMatrix : ROTATIONS) {
             Scanner rotatedScanner = unorientedScanner.rotate(rotationMatrix);
             if (orientedScanner.overlapsWith(rotatedScanner)) {
-                unorientedScanner.originPosition = rotatedScanner.originPosition;
+                unorientedScanner.origin = rotatedScanner.origin;
                 unorientedScanner.rotationMatrix = rotationMatrix;
                 unorientedScanner.beacons = rotatedScanner.beacons;
                 break;
@@ -70,6 +71,7 @@ class Simulator {
 
     /**
      * Indicates if there are any unoriented scanners remaining.
+     *
      * @return <code>true</code> if there are no unoriented scanners. <code>false</code> if there are one or more
      * unoriented scanners remaining.
      */
@@ -121,14 +123,9 @@ class Simulator {
         Set<int[]> beacons = new HashSet<>();
         for (String scannerName : this.scanners.keySet()) {
             for (int[] beacon : this.scanners.get(scannerName).beacons) {
-                if (null != this.scanners.get(scannerName).originPosition) {
-                    if (null != this.scanners.get(scannerName).rotationMatrix) {
-                        int[] translatedBeacon = this.scanners.get(scannerName).translate(beacon);
-                        if (-1 == this.scanners.get(scannerName).find(translatedBeacon,
-                                beacons.toArray(new int[][] { }))) {
-                            beacons.add(translatedBeacon);
-                        }
-                    }
+                int[] translatedBeacon = this.scanners.get(scannerName).translate(beacon);
+                if (!this.scanners.get(scannerName).contains(translatedBeacon, beacons.toArray(new int[][] { }))) {
+                    beacons.add(translatedBeacon);
                 }
             }
         }
@@ -142,6 +139,7 @@ class Simulator {
 
     /**
      * Runs the simulation with the specified data.
+     *
      * @param scanners the scanners to map
      */
     void run(Map<String, Scanner> scanners) {
