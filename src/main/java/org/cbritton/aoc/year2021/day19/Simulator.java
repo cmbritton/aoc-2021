@@ -138,6 +138,34 @@ class Simulator {
     }
 
     /**
+     * Determines the largest Manhattan distance between two scanners.
+     */
+    private void findMaxDistance() {
+
+        int maxDistance = 0;
+        long startTimeMillis = System.currentTimeMillis();
+        for (String s1Name : this.scanners.keySet()) {
+            for (String s2Name : this.scanners.keySet()) {
+                if (s1Name.equals(s2Name)) {
+                    continue;
+                }
+                Scanner s1 = this.scanners.get(s1Name);
+                Scanner s2 = this.scanners.get(s2Name);
+                int distance = Math.abs(s1.origin[0] - s2.origin[0])
+                        + Math.abs(s1.origin[1] - s2.origin[1])
+                        + Math.abs(s1.origin[2] - s2.origin[2]);
+                maxDistance = Math.max(distance, maxDistance);
+            }
+        }
+        long endTimeMillis = System.currentTimeMillis();
+        System.out.println("\nPart 2:");
+        System.out.println("    Longest Manhattan distance: " + maxDistance);
+        System.out.println("    Elapsed time: " + elapsedTime(startTimeMillis, endTimeMillis));
+
+        return;
+    }
+
+    /**
      * Runs the simulation with the specified data.
      *
      * @param scanners the scanners to map
@@ -146,6 +174,7 @@ class Simulator {
 
         this.scanners = scanners;
         findTotalBeaconCount();
+        findMaxDistance();
         return;
     }
 }
