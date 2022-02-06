@@ -1,119 +1,54 @@
 package org.cbritton.aoc.year2021.day20;
 
-import java.util.Arrays;
-
 public class Enhancer {
 
-    static final int PAD = 2;
+    static final int KERNEL_SIZE = 3;
+    static final int LEFT_KERNEL_BOUNDARY = -(KERNEL_SIZE / 2);
+    static final int RIGHT_KERNEL_BOUNDARY = LEFT_KERNEL_BOUNDARY + (KERNEL_SIZE - 1);
+    static final int LOWER_KERNEL_BOUNDARY = -(KERNEL_SIZE / 2);
+    static final int UPPER_KERNEL_BOUNDARY = LOWER_KERNEL_BOUNDARY + (KERNEL_SIZE - 1);
 
     int[] algorithm = null;
-
-    boolean firstTime = true;
 
     public Enhancer(int[] algorithm) {
         this.algorithm = algorithm;
     }
 
-    int[][] pad(int[][] imageData) {
-
-        int[][] paddedImageData = new int[imageData.length + (PAD * 2)][imageData[0].length + (PAD * 2)];
-        for (int i = 0; i < paddedImageData.length; ++i) {
-            Arrays.fill(paddedImageData[i], 0);
-            if ((i >= PAD) && (i < (paddedImageData.length - PAD))) {
-                System.arraycopy(imageData[i - PAD], 0, paddedImageData[i], PAD, imageData[i - PAD].length);
-            }
-        }
-        return paddedImageData;
-    }
-
-    void extendRight(int[][] imageData) {
-
-        for (int i = 0; i < imageData.length; ++i) {
-            for (int j = 0; j < PAD; ++j) {
-                imageData[i][imageData.length - j - 1] = imageData[i][imageData.length - PAD - 1];
-            }
-        }
-        return;
-    }
-
-    void extendLeft(int[][] imageData) {
-
-        for (int i = 0; i < imageData.length; ++i) {
-            for (int j = 0; j < PAD; ++j) {
-                imageData[i][j] = imageData[i][PAD];
-            }
-        }
-        return;
-    }
-
-    int[][] extend(int[][] imageData) {
-
-        int[][] extendedImageData = new int[imageData.length + (PAD * 2)][imageData[0].length + (PAD * 2)];
-        for (int i = 0; i < extendedImageData.length; ++i) {
-            Arrays.fill(extendedImageData[i], 0);
-            if (i < PAD) {
-                System.arraycopy(imageData[0], 0, extendedImageData[i], PAD, imageData[0].length);
-            } else if (i >= extendedImageData.length - PAD) {
-                System.arraycopy(imageData[imageData.length - 1], 0, extendedImageData[i], PAD,
-                        imageData[imageData.length - 1].length);
-            } else {
-                System.arraycopy(imageData[i - PAD], 0, extendedImageData[i], PAD, imageData[i - PAD].length);
-            }
-        }
-        extendLeft(extendedImageData);
-        extendRight(extendedImageData);
-        return extendedImageData;
-    }
-
     Image enhance(Image image) {
 
-        int[][] imageData = image.data;
-//        if (firstTime) {
-            imageData = pad(image.data);
-//            firstTime = false;
-//        } else {
-//            imageData = extend(image.data);
-//        }
-        int rows = imageData.length;
-        int cols = imageData[0].length;
-        int[][] enhancedImageData = new int[rows][cols];
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                enhancePixel(i, j, imageData, enhancedImageData);
+        Image enhancedImage = new Image();
+        enhancedImage.isExtendedPixelsLit = !image.isExtendedPixelsLit;
+
+        for (int x = image.minX - 1; x <= image.maxX + 1; ++x) {
+            for (int y = image.minY - 1; y <= image.maxY + 1; ++y) {
+                enhancePixel(x, y, image, enhancedImage);
             }
         }
-        return new Image(enhancedImageData);
+        return enhancedImage;
     }
 
-    private void enhancePixel(int row, int col, int[][]imageData, int[][]enhancedImageData) {
-        enhancedImageData[row][col] = this.algorithm[getEnhancementIndex(row, col, imageData)];
+    private void enhancePixel(int x, int y, Image image, Image enhancedImage) {
+
+        if (1 == this.algorithm[getEnhancementIndex(x, y, image)]) {
+            enhancedImage.add(new Point(x, y));
+        }
+        return;
     }
 
-    private int getEnhancementIndex(int row, int col, int[][] imageData) {
+    private int getEnhancementIndex(int x, int y, Image image) {
 
+        Point point = new Point();
         int enhancementIndex = 0;
-        for (int i = -1; i < 2; ++i) {
-            for (int j = -1; j < 2; ++j) {
-                int subRow = row + i;
-                int subCol = col + j;
-                int pixelValue = getPixelValue(subRow, subCol, imageData);
-                enhancementIndex |= (pixelValue << 8 - (((i + 1) * 3) + (j + 1)));
-//                System.err.print(" " + pixelValue);
+        for (int i = LEFT_KERNEL_BOUNDARY; i <= RIGHT_KERNEL_BOUNDARY; ++i) {
+            for (int j = LOWER_KERNEL_BOUNDARY; j <= UPPER_KERNEL_BOUNDARY; ++j) {
+                point.x = x + i;
+                point.y = y + j;
+                enhancementIndex <<= 1;
+                if (image.isPixelLit(point)) {
+                    enhancementIndex |= 1;
+                }
             }
-//            System.err.println();
         }
-//        System.err.println(", row=" + row + ", col=" + col + ", index=" + enhancementIndex);
         return enhancementIndex;
-    }
-
-    private int getPixelValue(int subRow, int subCol, int[][] imageData) {
-
-        if ((subRow < 0) || (subRow > imageData.length - 1)) {
-            return 0;
-        } else if ((subCol < 0) || (subCol > imageData[0].length - 1)) {
-            return 0;
-        } else {
-            return imageData[subRow][subCol];
-        }
     }
 }

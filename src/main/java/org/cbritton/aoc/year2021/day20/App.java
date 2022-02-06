@@ -3,7 +3,6 @@ package org.cbritton.aoc.year2021.day20;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.cbritton.TimeUtil.elapsedTime;
@@ -47,17 +46,14 @@ public class App {
         List<String> imageDataStr = input.subList(2, input.size());
         int rows = imageDataStr.size();
         int cols = imageDataStr.get(0).length();
-        int[][] imageData = new int[rows][cols];
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                if (imageDataStr.get(i).charAt(j) == '.') {
-                    imageData[i][j] = 0;
-                } else {
-                    imageData[i][j] = 1;
+        data.image = new Image();
+        for (int x = 0; x < rows; ++x) {
+            for (int y = 0; y < cols; ++y) {
+                if (imageDataStr.get(x).charAt(y) == '#') {
+                    data.image.add(new Point(x, y));
                 }
             }
         }
-        data.image = new Image(imageData);
         long endTimeMillis = System.currentTimeMillis();
         System.out.println("\nInit data:");
         System.out.println("    Elapsed time: " + elapsedTime(startTimeMillis, endTimeMillis));

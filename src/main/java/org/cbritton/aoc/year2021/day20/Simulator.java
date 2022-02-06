@@ -16,11 +16,6 @@ class Simulator {
         return instance;
     }
 
-    // 83298 is too high
-    // 78730 is too high
-    // 78542 is too high
-    // 46232 is wrong
-
     void run(Image image, Enhancer enhancer) {
 
         long startTimeMillis = System.currentTimeMillis();
@@ -30,8 +25,7 @@ class Simulator {
         for (int i = 0; i < PART_1_ENHANCEMENT_COUNT; ++i) {
             this.image = enhancer.enhance(this.image);
         }
-//        System.out.println("\n\n");
-//        this.image.printImage();
+
         long endTimeMillis = System.currentTimeMillis();
         System.out.println("\nPart 1:");
         System.out.println("    Lit pixel count: " + this.image.getLitPixelCount());
@@ -41,13 +35,14 @@ class Simulator {
         for (int i = 0; i < PART_2_ENHANCEMENT_COUNT; ++i) {
             this.image = enhancer.enhance(this.image);
         }
-        System.out.println("\n\n");
-        this.image.printImage();
 
         endTimeMillis = System.currentTimeMillis();
         System.out.println("\nPart 2:");
         System.out.println("    Lit pixel count: " + this.image.getLitPixelCount());
         System.out.println("    Elapsed time: " + elapsedTime(startTimeMillis, endTimeMillis));
+
+        System.out.println("memory: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
+//        this.image.printImage();
 
         return;
     }

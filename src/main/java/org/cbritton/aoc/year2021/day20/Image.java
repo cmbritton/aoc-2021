@@ -1,35 +1,67 @@
 package org.cbritton.aoc.year2021.day20;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Image {
 
-    int[][] data = null;
+    private Set<Point> data = null;
 
-    public Image(int[][] data) {
-        this.data = data;
+    int minX = Integer.MAX_VALUE;
+    int maxX = Integer.MIN_VALUE;
+    int minY = Integer.MAX_VALUE;
+    int maxY = Integer.MIN_VALUE;
+
+    boolean isExtendedPixelsLit = false;
+
+    public Image() {
+        this.data = new HashSet<>();
+    }
+
+    void add(Point point) {
+
+        this.data.add(point);
+        if (point.x < this.minX) {
+            this.minX = point.x;
+        }
+        if (point.x > this.maxX) {
+            this.maxX = point.x;
+        }
+        if (point.y < this.minY) {
+            this.minY = point.y;
+        }
+        if (point.y > this.maxY) {
+            this.maxY = point.y;
+        }
+        return;
+    }
+
+    boolean isPixelLit(Point point) {
+        if ((point.x < this.minX) || (point.x > this.maxX)
+                || (point.y < this.minY) || (point.y > this.maxY)) {
+            return this.isExtendedPixelsLit;
+        }
+        return this.data.contains(point);
     }
 
     int getLitPixelCount() {
-
-        int litPixelCount = 0;
-        for (int i = 0; i < data.length; ++i) {
-            for (int j = 0; j < data[0].length; ++j) {
-                if (data[i][j] == 1) {
-                    litPixelCount++;
-                }
-            }
-        }
-        return litPixelCount;
-
+        return data.size();
     }
 
     void printImage() {
+        printImage(this.minX, this.maxX, this.minY, this.maxY);
+        return;
+    }
 
-        for (int i = 0; i < data.length; ++i) {
-            for (int j = 0; j < data[0].length; ++j) {
-                if (data[i][j] == 0) {
-                    System.out.print(".");
-                } else {
+    void printImage(int minX, int maxX, int minY, int maxY) {
+
+        System.out.println("isExtendedPixelsLit: " + this.isExtendedPixelsLit);
+        for (int y = minY; y <= maxY; ++y) {
+            for (int x = minX; x <= maxX; ++x) {
+                if (data.contains(new Point(x, y))) {
                     System.out.print("#");
+                } else {
+                    System.out.print(".");
                 }
             }
             System.out.println();
